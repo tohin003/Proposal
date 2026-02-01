@@ -214,7 +214,9 @@ h1 {
 .curtain {
   width: 50%;
   height: 100%;
-  background: url('/assets/curtain.png');
+  background-color: var(--color-deep-pink);
+  /* Fallback color */
+  background-image: url('/assets/curtain.png');
   background-size: cover;
   background-position: center;
   position: relative;
