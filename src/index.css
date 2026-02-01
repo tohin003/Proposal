@@ -156,13 +156,18 @@ h1 {
 
 .site-footer {
   position: fixed;
-  bottom: 10px;
-  width: 100%;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
   text-align: center;
   font-family: var(--font-hand);
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   color: var(--color-deep-pink);
-  opacity: 0.8;
-  pointer-events: none;
-  /* Let clicks pass through if it overlaps anything */
+  background: rgba(255, 255, 255, 0.9);
+  padding: 10px 30px;
+  border-radius: 50px;
+  box-shadow: 0 4px 15px rgba(255, 141, 161, 0.2);
+  z-index: 100;
+  white-space: nowrap;
 }

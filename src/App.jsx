@@ -53,17 +53,23 @@ function App() {
       setTeddyState('sad');
     }
 
-    if (newCount > 6 && yesBtnRef.current) {
+    // Logic to hide behind Yes button if user is too persistent
+    if (newCount > 8 && yesBtnRef.current) {
       moveBehindYes();
       return;
     }
 
+    // Run away logic
     const container = containerRef.current;
     if (container) {
       const containerRect = container.getBoundingClientRect();
       const btnRect = e.target.getBoundingClientRect();
+
+      // Calculate random position within container bounds
+      // Subtract button size to ensure it stays inside
       const maxX = containerRect.width - btnRect.width;
       const maxY = containerRect.height - btnRect.height;
+
       const randomX = Math.random() * maxX - (containerRect.width / 2) + 50;
       const randomY = Math.random() * maxY - (containerRect.height / 2) + 50;
 
@@ -74,10 +80,8 @@ function App() {
 
   const moveBehindYes = () => {
     setIsNoBtnAbsolute(true);
-    // Offset slightly so it looks like it's peeking/hiding behind
-    // Assuming buttons are relative to the group container. 
-    // We'll tuck it just slightly to the right and back.
-    setNoBtnPosition({ x: 20, y: 10 });
+    // Offset slightly so it looks like it's peeking/hiding behind (top-right peek)
+    setNoBtnPosition({ x: 50, y: -20 });
   };
 
   const handleYesClick = () => {
