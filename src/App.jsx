@@ -1,4 +1,3 @@
-```
 import React, { useState, useRef, useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import Teddy from './components/Teddy';
@@ -158,7 +157,7 @@ function App() {
               onMouseEnter={handleNoHover}
               style={isNoBtnAbsolute ? {
                 position: 'absolute',
-                transform: `translate(${ noBtnPosition.x }px, ${ noBtnPosition.y }px)`,
+                transform: `translate(${noBtnPosition.x}px, ${noBtnPosition.y}px)`,
                 zIndex: 1
               } : {}}
             >
