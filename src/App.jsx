@@ -41,17 +41,35 @@ function App() {
     }, 250);
   };
 
+  const [thoughtMessage, setThoughtMessage] = useState(null);
+
+  const messages = [
+    "Don't chase him!",
+    "You're scaring him!",
+    "Click here instead!",
+    "I know you love Tohin...",
+    "Just click YES!",
+    "Look at his sad face :(",
+    "He's hiding from you!",
+    "Please say yes..."
+  ];
+
   const handleNoHover = (e) => {
     if (isSuccess) return;
 
     const newCount = hoverCount + 1;
     setHoverCount(newCount);
 
+    // Make teddy sad/scared
     if (newCount > 3) {
       setTeddyState('scared');
     } else {
       setTeddyState('sad');
     }
+
+    // Show thought message
+    const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+    setThoughtMessage(randomMsg);
 
     // Logic to hide behind Yes button if user is too persistent
     if (newCount > 8 && yesBtnRef.current) {
@@ -64,12 +82,8 @@ function App() {
     if (container) {
       const containerRect = container.getBoundingClientRect();
       const btnRect = e.target.getBoundingClientRect();
-
-      // Calculate random position within container bounds
-      // Subtract button size to ensure it stays inside
       const maxX = containerRect.width - btnRect.width;
       const maxY = containerRect.height - btnRect.height;
-
       const randomX = Math.random() * maxX - (containerRect.width / 2) + 50;
       const randomY = Math.random() * maxY - (containerRect.height / 2) + 50;
 
@@ -80,15 +94,13 @@ function App() {
 
   const moveBehindYes = () => {
     setIsNoBtnAbsolute(true);
-    // Offset slightly so it looks like it's peeking/hiding behind (top-right peek)
     setNoBtnPosition({ x: 50, y: -20 });
   };
 
   const handleYesClick = () => {
-    handleSuccessState();
-
-    // Open new tab with the same site but with success param
-    // This ensures it has the full design
+    setIsSuccess(true);
+    setTeddyState('success');
+    fireworks();
     setTimeout(() => {
       const url = new URL(window.location.href);
       url.searchParams.set('success', 'true');
@@ -96,11 +108,10 @@ function App() {
     }, 1000);
   };
 
-  const resetTeddy = () => {
-    if (!isSuccess && teddyState !== 'idle') {
-      // Optional: Reset to idle after delay? 
-      // For now, let's keep it responsive.
-      // setTeddyState('idle'); 
+  const handleYesHover = () => {
+    if (!isSuccess) {
+      setTeddyState('idle'); // Make teddy happy/idle again
+      setThoughtMessage(null); // Clear negative thoughts
     }
   };
 
@@ -123,8 +134,15 @@ function App() {
               ref={yesBtnRef}
               className="btn btn-yes"
               onClick={handleYesClick}
+              onMouseEnter={handleYesHover}
+              style={{ position: 'relative' }}
             >
               YES
+              {thoughtMessage && (
+                <div className="thought-cloud">
+                  {thoughtMessage}
+                </div>
+              )}
             </button>
 
             <button
