@@ -72,7 +72,7 @@ function App() {
     setThoughtMessage(randomMsg);
 
     // Logic to hide behind Yes button if user is too persistent
-    if (newCount > 8 && yesBtnRef.current) {
+    if (newCount > 10 && yesBtnRef.current) {
       moveBehindYes();
       return;
     }
@@ -82,10 +82,23 @@ function App() {
     if (container) {
       const containerRect = container.getBoundingClientRect();
       const btnRect = e.target.getBoundingClientRect();
-      const maxX = containerRect.width - btnRect.width;
-      const maxY = containerRect.height - btnRect.height;
-      const randomX = Math.random() * maxX - (containerRect.width / 2) + 50;
-      const randomY = Math.random() * maxY - (containerRect.height / 2) + 50;
+      const btnGroupRect = e.target.parentElement.getBoundingClientRect();
+
+      // Calculate boundaries relative to the button group
+      // We want to keep it inside the container (card)
+      // The button group is roughly in the middle/bottom of the card
+
+      // Allow moving mostly anywhere in the card, but relative to button group
+      // This requires converting card bounds to button-group relative coords
+
+      const minX = -btnGroupRect.left + containerRect.left + 20; // Left edge of card
+      const maxX = -btnGroupRect.left + containerRect.right - btnRect.width - 20; // Right edge
+
+      const minY = -btnGroupRect.top + containerRect.top + 20; // Top edge
+      const maxY = -btnGroupRect.top + containerRect.bottom - btnRect.height - 20; // Bottom edge
+
+      const randomX = Math.random() * (maxX - minX) + minX;
+      const randomY = Math.random() * (maxY - minY) + minY;
 
       setIsNoBtnAbsolute(true);
       setNoBtnPosition({ x: randomX, y: randomY });
@@ -95,6 +108,13 @@ function App() {
   const moveBehindYes = () => {
     setIsNoBtnAbsolute(true);
     setNoBtnPosition({ x: 50, y: -20 });
+
+    // Trigger special message after 3 seconds if not clicked yet
+    setTimeout(() => {
+      if (!isSuccess) {
+        setThoughtMessage("Emn Fida demu tratri yes tip de");
+      }
+    }, 3000);
   };
 
   const handleYesClick = () => {
